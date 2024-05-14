@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Продукты";
+}
+@model IEnumerable<ProductDto>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">Список продуктов</h1>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+                <form asp-action="Index" asp-controller="Home" method="post">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" placeholder="Цена от" aria-label="Price start" name="priceStart" min="0" max="10000" value="@ViewData["priceStart"]">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" placeholder="Цена до" aria-label="Price end" name="priceEnd" min="0" max="10000" value="@ViewData["priceEnd"]">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-outline-primary">Применить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @if (User.IsInRole(StaticData.RoleUser) || User.IsInRole(StaticData.RoleManager))
+            {
+                <div class="col-6 text-end">
+                    <a class="btn btn-outline-primary" asp-action="Create"><i class="bi bi-plus-square"></i> Создать новый продукт</a>
+                </div>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CategoryId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.GeneralNote)
+                        </th>
+                        @if (User.IsInRole(StaticData.RoleManager))
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => model.SpecialNote)
+                            </th>
+                        }
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Category" asp-route-categoryId="@item.CategoryId"> @item.Category.Name</a>
+                            </td>
+                            <td>
+                                <span class="d-inline-block text-truncate" style="max-width: 150px;" title="@item.Description">
+                                    @item.Description
+                                </span>
+                            </td>
+                            <td>
+                                <span id="rubPrice">@item.Price.ToString("N3", new CultureInfo("en-US")) </span>
+                                <span id="tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="">*</span>
+                            </td>
+                            <td>
+                                <span class="d-inline-block text-truncate" style="max-width: 150px;" title="@item.GeneralNote">
+                                    @item.GeneralNote
+                                </span>
+                            </td>
+                            @if (User.IsInRole(StaticData.RoleManager))
+                            {
+                                <td>
+                                    <span class="d-inline-block text-truncate" style="max-width: 200px;" title="@item.SpecialNote">
+                                        @item.SpecialNote
+                                    </span>
+                                </td>
+                            }
+                            <td>
+                                @if (User.IsInRole(StaticData.RoleUser) || User.IsInRole(StaticData.RoleManager))
+                                {
+                                    <a class="btn btn-success" asp-action="Edit" asp-route-productId="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                                @if (User.IsInRole(StaticData.RoleManager))
+                                {
+                                    <button onclick="confirmDelete(@item.Id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(productId) {
+            if (confirm("Вы уверены, что хотите удалить этот продукт?")) {
+                window.location.href = `/Home/Delete?productId=${productId}`;
+            }
+        }
+        addTooltipRateListener('@StaticData.ProductCatalogAPIBase');
+    </script>
+}

@@ -1,0 +1,113 @@
+﻿@model CategoryDto
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">@Model.Name</h1>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+                <a href="javascript:history.go(-1)" type="button" class="btn btn-outline-primary">Назад</a>
+            </div>
+            @if (User.IsInRole(StaticData.RoleUser) || User.IsInRole(StaticData.RoleManager))
+            {
+                <div class="col-6 text-end">
+                    <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Home"><i class="bi bi-plus-square"></i> Создать новый продукт</a>
+                </div>
+            }
+
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products.FirstOrDefault().Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products.FirstOrDefault().CategoryId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products.FirstOrDefault().Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products.FirstOrDefault().Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products.FirstOrDefault().GeneralNote)
+                        </th>
+                        @if (User.IsInRole(StaticData.RoleManager))
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => model.Products.FirstOrDefault().SpecialNote)
+                            </th>
+                        }
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @Model.Name
+                            </td>
+                            <td>
+                                <span class="d-inline-block text-truncate" style="max-width: 150px;" title="@item.Description">
+                                    @item.Description
+                                </span>
+                            </td>
+                            <td>
+                                <span id="rubPrice">@item.Price.ToString("N3", new CultureInfo("en-US")) </span>
+                                <span id="tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="">*</span>
+                            </td>
+                            <td>
+                                <span class="d-inline-block text-truncate" style="max-width: 150px;" title="@item.GeneralNote">
+                                    @item.GeneralNote
+                                </span>
+                            </td>
+                            @if (User.IsInRole(StaticData.RoleManager))
+                            {
+                                <td>
+                                    <span class="d-inline-block text-truncate" style="max-width: 150px;" @item.SpecialNote>
+                                        @item.SpecialNote
+                                    </span>
+                                </td>
+                            }
+                            <td>
+                                @if (User.IsInRole(StaticData.RoleUser) || User.IsInRole(StaticData.RoleManager))
+                                {
+                                    <a class="btn btn-success" asp-action="Edit" asp-controller="Home" asp-route-productId="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                                @if (User.IsInRole(StaticData.RoleManager))
+                                {
+                                    <button onclick="confirmDelete(@item.Id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(productId) {
+            if (confirm("Вы уверены, что хотите удалить этот продукт?")) {
+                window.location.href = `/Home/Delete?productId=${productId}`;
+            }
+        }
+        addTooltipRateListener('@StaticData.ProductCatalogAPIBase');
+    </script>
+}

@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Панель администратора";
+}
+@model IEnumerable<UserDto>
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-white">Список пользователей</h1>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+            </div>
+            <div class="col-6 text-end">
+                <a class="btn btn-outline-primary" asp-action="Create"><i class="bi bi-plus-square"></i> Создать пользователя</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PhoneNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Role)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @item.PhoneNumber
+                            </td>
+                            <td>
+                                @item.Role
+                            </td>
+                            <td>
+                                <a class="btn btn-warning" asp-action="Block" asp-route-userId="@item.Id" title="Block">
+                                    <i class="fa-solid fa-ban"></i>
+                                </a>
+                                <a class="btn btn-success" asp-action="Edit" asp-route-userId="@item.Id" title="Change Password">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="confirmDelete('@item.Id')" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(userId) {
+            if (confirm("Вы уверены, что хотите удалить этот продукт?")) {
+                window.location.href = `/Admin/Delete?userId=${userId}`;
+            }
+        }
+    </script>
+}

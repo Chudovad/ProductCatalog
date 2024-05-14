@@ -1,0 +1,13 @@
+﻿@model IEnumerable<CategoryDto>
+
+<ul class="dropdown-menu dropdown-menu-dark">
+    @foreach (var category in Model)
+    {
+        <li><a class="dropdown-item" asp-action="Details" asp-controller="Category" asp-route-categoryId="@category.Id">@category.Name</a></li>
+    }
+    @if (User.IsInRole(StaticData.RoleManager))
+    {
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-primary" asp-controller="Category" asp-action="Index">Справочник категорий</a></li>
+    }
+</ul>

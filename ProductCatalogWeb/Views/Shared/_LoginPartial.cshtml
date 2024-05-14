@@ -1,0 +1,14 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    <div class="text-end">
+        <span class="text-light px-2">@User.Identity.Name</span>
+        <a class="btn btn-outline-light me-2" asp-action="Logout" asp-controller="Auth">Выйти</a>
+    </div>
+}
+else
+{
+    <div class="text-end">
+        <a class="btn btn-outline-light me-2" asp-action="Login" asp-controller="Auth">Войти</a>
+        <a class="btn btn-secondary" asp-action="Register" asp-controller="Auth">Регистрация</a>
+    </div>
+}

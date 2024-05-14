@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Категории";
+}
+@model IEnumerable<CategoryDto>
+
+@if (User.IsInRole(StaticData.RoleManager))
+{
+    <div class="card shadow border-0 mt-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Список категорий</h1>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="row pb-3">
+                <div class="col-6">
+                </div>
+                <div class="col-6 text-end">
+                    <a class="btn btn-outline-primary" asp-action="Create"><i class="bi bi-plus-square"></i> Создать новую категорию</a>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-categoryId="@item.Id">@item.Name</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-success" asp-action="Edit" asp-route-categoryId="@item.Id">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="confirmDelete(@item.Id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    @section Scripts {
+    <script>
+        function confirmDelete(categoryId) {
+            if (confirm("Вы уверены, что хотите удалить эту категорию?")) {
+                window.location.href = `/Category/Delete?categoryId=${categoryId}`;
+            }
+        }
+    </script>
+    }
+}

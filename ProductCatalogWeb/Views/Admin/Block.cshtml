@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Заблокировать пользователя";
+}
+@model UserDto
+
+<form asp-action="Block">
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Заблокировать пользователя</h1>
+        <hr />
+        <input asp-for="Id" hidden />
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="Name" class="control-label pb-3" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" class="form-control" disabled />
+            </div>
+            <div class="col-2">
+                <label asp-for="Email" class="control-label pb-3" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Email" class="form-control" type="email" disabled />
+            </div>
+            <div class="col-2">
+                <label asp-for="PhoneNumber" class="control-label pb-3" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="PhoneNumber" class="form-control" disabled />
+            </div>
+            <div class="col-2">
+                <label asp-for="Role" class="control-label pb-3" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Role" class="form-control" disabled />
+            </div>
+            <div class="col-2">
+                <label for="dateTimeOffset" class="control-label pb-3" style="font-size:20px;">Заблокировать до</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input class="form-control form_datetime" type="text" name="dateTimeOffset" />
+            </div>
+            <span class="text-danger text-center p-md-2">@ViewData["error"]</span>
+            <div class="col-5 offset-2">
+                <a asp-action="Index" class="btn-primary btn form-control ">Назад к списку</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Создать" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".form_datetime").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });
+            $(".form_datetime").datetimepicker('setStartDate', new Date());
+        });
+    </script>
+}

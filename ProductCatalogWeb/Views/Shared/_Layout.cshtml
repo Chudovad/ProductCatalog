@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Каталог продуктов</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProductCatalogWeb.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="p-3 bg-dark text-white">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
+            <div class="container">
+                <a class="navbar-brand text-warning" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-basket-shopping px-2"></i>
+                    Каталог продуктов
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Продукты</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Категории</a>
+                            @await Component.InvokeAsync("Categories")
+                        </li>
+                        @if (User.IsInRole(StaticData.RoleAdmin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Admin" asp-action="Index">Панель администратора</a>
+                            </li>
+                        }
+                    </ul>
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" asp-action="Index" asp-controller="Home" method="post">
+                        <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search" name="searchText" value="@ViewData["searchText"]">
+                    </form>
+                    <div class="text-end">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year.ToString() - Каталог продуктов
+        </div>
+    </footer>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/949c140343.js" crossorigin="anonymous"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
